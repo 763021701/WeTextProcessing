@@ -36,7 +36,7 @@ def main():
     parser.add_argument("--cache_dir", type=str, default=None, help="cache dir containing *.fst")
     parser.add_argument("--overwrite_cache", action="store_true", help="rebuild *.fst")
     parser.add_argument("--enable_standalone_number", type=str, default="True", help="一百 = 100 if True else 一百")
-    parser.add_argument("--enable_0_to_9", type=str, default="False", help="零和九 = 0和9 if True else 零和九")
+    parser.add_argument("--enable_0_to_9", type=str, default="True", help="零和九 = 0和9 if True else 零和九")
     parser.add_argument("--enable_million", type=str, default="False", help="六百万 = 6000000 if True else 600万")
     parser.add_argument("--language", type=str, default="zh", choices=["zh", "ja"], help="valid languages")
     args = parser.parse_args()

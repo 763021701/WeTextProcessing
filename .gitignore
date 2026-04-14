@@ -42,6 +42,9 @@ build/
 dist/
 tn/*.far
 itn/*.far
+tn/*.fst
+itn/*.fst
+
 
 # Version file(setuptools_scm generated)
 tn/_version.py
