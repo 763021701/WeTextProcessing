@@ -548,6 +548,10 @@ class Measure(Processor):
             | measure_si_creatinine
             | measure_si_density
         )
+        measure_sci_range = add_weight(
+            delete("一").ques + sci_body + to + delete("一").ques + sci_body + sci_suffix,
+            -0.59,
+        )
         # 有单位后缀时优先（与「十的十二次方每升」）；无后缀时允许纯幂如「十的十二次方」→10^12
         measure_sci = add_weight(delete("一").ques + sci_body + sci_suffix, -0.58) | add_weight(
             delete("一").ques + sci_body, -0.53
@@ -567,7 +571,8 @@ class Measure(Processor):
 
         # 十千米每小时 => 10km/h, 十一到一百千米每小时 => 11~100km/h
         measure = (
-            measure_sci
+            measure_sci_range
+            | measure_sci
             | measure_sci_sfc_family
             | measure_si_per_scaled_wbc_rbc
             | measure_num_sfc_family
