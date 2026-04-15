@@ -36,7 +36,7 @@ class Measure(Processor):
         digit = string_file(get_abs_path("../itn/chinese/data/number/digit.tsv"))  # 1 ~ 9
         digit_zh = string_file(get_abs_path("../itn/chinese/data/number/digit_zh.tsv"))  # 1 ~ 9
         addzero = insert("0")
-        to = cross("到", "~") | cross("到百分之", "~")
+        to = union(cross("到", "~"), cross("至", "~"), cross("到百分之", "~"), cross("至百分之", "~"))
 
         units = add_weight((accep("亿") | accep("兆") | accep("万")), -0.5).ques + units_zh
         units |= add_weight((cross("亿", "00M") | cross("兆", "T") | cross("万", "W")), -0.5).ques + (
