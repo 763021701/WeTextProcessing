@@ -36,7 +36,8 @@ class Measure(Processor):
         digit = string_file(get_abs_path("../itn/chinese/data/number/digit.tsv"))  # 1 ~ 9
         digit_zh = string_file(get_abs_path("../itn/chinese/data/number/digit_zh.tsv"))  # 1 ~ 9
         addzero = insert("0")
-        to = union(cross("到", "–"), cross("至", "–"), cross("到百分之", "~"), cross("至百分之", "~"))
+        to = union(cross("到", "-"), cross("至", "-"))
+        to_percent = union(cross("到", "~"), cross("至", "~"), cross("到百分之", "~"), cross("至百分之", "~"))
 
         units = add_weight((accep("亿") | accep("兆") | accep("万")), -0.5).ques + units_zh
         units |= add_weight((cross("亿", "00M") | cross("兆", "T") | cross("万", "W")), -0.5).ques + (
@@ -149,6 +150,10 @@ class Measure(Processor):
         si_den = si_den_vol | si_den_g
         si_density_body = si_num + delete("每") + insert("/") + si_den
         measure_si_density = add_weight(si_density_body, -0.52)
+        measure_range_si_density = add_weight(
+            (num_or_ascii + to + num_or_ascii) + si_density_body,
+            -0.58,
+        )
         osm_num = _si_cross(
             ("毫渗量", "mOsm"),
             ("毫渗摩尔", "mOsm"),
@@ -563,8 +568,8 @@ class Measure(Processor):
             + delete("百分")
             + delete("之").ques
             + (
-                (Cardinal().number + (to + Cardinal().number).ques)
-                | ((Cardinal().number + to).ques + cross("百", "100"))
+                (Cardinal().number + (to_percent + Cardinal().number).ques)
+                | ((Cardinal().number + to_percent).ques + cross("百", "100"))
             )
             + insert("%")
         )
@@ -590,6 +595,7 @@ class Measure(Processor):
             | measure_per_count_wbc_rbc
             | measure_si_creatinine
             | measure_osm
+            | measure_range_si_density
             | measure_si_density
             | measure_num_si_density
             | measure_num_count_per
